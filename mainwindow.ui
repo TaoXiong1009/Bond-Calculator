@@ -382,6 +382,9 @@
          <pointsize>15</pointsize>
         </font>
        </property>
+       <property name="displayFormat">
+        <string>yyyy/MM/dd</string>
+       </property>
       </widget>
       <widget class="QLineEdit" name="sell_clean_price_text">
        <property name="geometry">
@@ -444,6 +447,9 @@
         <font>
          <pointsize>15</pointsize>
         </font>
+       </property>
+       <property name="displayFormat">
+        <string>yyyy/MM/dd</string>
        </property>
       </widget>
       <widget class="QWidget" name="widget" native="true">
@@ -539,7 +545,7 @@
          <x>300</x>
          <y>60</y>
          <width>201</width>
-         <height>141</height>
+         <height>151</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -1149,6 +1155,9 @@
         <font>
          <pointsize>15</pointsize>
         </font>
+       </property>
+       <property name="displayFormat">
+        <string>yyyy/MM/dd</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="option">

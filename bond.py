@@ -24,7 +24,8 @@ class Bond:
         self.maturity_date: str = get_maturity_date(code)  # YYYY-MM-DD
         self.coupon_rate: float = get_coupon_rate(code)
         self.tenor: int = get_tenor(code)  # 6M, 3M, etc
-        self.accrual_method: str = get_accrural_method(code)
+        self.accrural_method: str = get_accrural_method(code)
+        self.convert_accrural_method: ql.DayCounter =  convert_accrural_method(self.accrural_method)
         self.settlement: str = get_settlement(code) # 0 or 1 (correspond to T+0 or T+1)
 
         self.bond_ql = self.create_bond_ql()  # 创建QuantLib Bond类
@@ -33,16 +34,18 @@ class Bond:
         issue_date = ql.Date(self.issue_date, '%Y-%m-%d')
         maturity = ql.Date(self.maturity_date, '%Y-%m-%d')
         tenor = ql.Period(self.tenor, ql.Months)
-        daycount_convention = self.convert_accrural_method(
-            self.accrural_method)
+        calendar = ql.China()
+        businessConvention = ql.Unadjusted
+        dateGeneration = ql.DateGeneration.Backward
+        monthEnd = False
+        schedule = ql.Schedule(issue_date, maturity, tenor, calendar, businessConvention,
+                                    businessConvention, dateGeneration, monthEnd)
+        #daycount_convention = self.convert_accrural_method(self.accrural_method)
 
         Bond_ql = ql.FixedRateBond(self.settlement,
-                                   ql.China(),
                                    100,
-                                   issue_date,
-                                   maturity,
-                                   tenor,
-                                   [bond.coupon],
-                                   daycount_convention)
+                                   schedule,
+                                   [self.coupon_rate],
+                                   ql.Thirty360())
 
         return Bond_ql

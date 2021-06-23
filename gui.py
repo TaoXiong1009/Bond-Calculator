@@ -1,4 +1,4 @@
- import re
+import re
 import traceback
 
 from PyQt5 import QtWidgets, uic
@@ -44,17 +44,20 @@ class Ui(QtWidgets.QMainWindow):
         self.code_sh.setText(str(quote_df.loc['code', 'SH']))
         self.code_sz.setText(str(quote_df.loc['code', 'SZ']))
 
-        self.clean_price_ib.setText(str(quote_df.loc['clean', 'IB']))
-        self.clean_price_sh.setText(str(quote_df.loc['clean', 'SH']))
-        self.clean_price_sz.setText(str(quote_df.loc['clean', 'SZ']))
+        self.clean_price_ib.setText(
+            '{:.4f}'.format(quote_df.loc['clean', 'IB']))
+        self.clean_price_sh.setText(
+            '{:.4f}'.format(quote_df.loc['clean', 'SH']))
+        self.clean_price_sz.setText(
+            '{:.4f}'.format(quote_df.loc['clean', 'SZ']))
 
-        self.full_price_ib.setText(str(quote_df.loc['full', 'IB']))
-        self.full_price_sh.setText(str(quote_df.loc['full', 'SH']))
-        self.full_price_sz.setText(str(quote_df.loc['full', 'SZ']))
+        self.full_price_ib.setText('{:.4f}'.format(quote_df.loc['full', 'IB']))
+        self.full_price_sh.setText('{:.4f}'.format(quote_df.loc['full', 'SH']))
+        self.full_price_sz.setText('{:.4f}'.format(quote_df.loc['full', 'SZ']))
 
-        self.yield_ib.setText(str(quote_df.loc['yield', 'IB']))
-        self.yield_sh.setText(str(quote_df.loc['yield', 'SH']))
-        self.yield_sz.setText(str(quote_df.loc['yield', 'SZ']))
+        self.yield_ib.setText('{:.4f}'.format(quote_df.loc['yield', 'IB']))
+        self.yield_sh.setText('{:.4f}'.format(quote_df.loc['yield', 'SH']))
+        self.yield_sz.setText('{:.4f}'.format(quote_df.loc['yield', 'SZ']))
 
     def clearHPY(self):
         for LineEditor in self.HPY.findChildren(QtWidgets.QLineEdit):
@@ -70,7 +73,8 @@ class Ui(QtWidgets.QMainWindow):
         buy_date = self.buy_date_text.text().replace('/', '-')
         sell_clean_price = self.sell_clean_price_text.text()
         sell_date = self.sell_date_text.text().replace('/', '-')
-
+        print(buy_date, sell_date)
+        
         # do sanity check
         flag1 = re.match(r'^\d{6}\.(IB|SZ|SH)$', bond_code) is not None
         flag2 = buy_clean_price.replace('.', '', 1).isdigit()
@@ -90,8 +94,8 @@ class Ui(QtWidgets.QMainWindow):
             bond = Bond(bond_code,
                         buy_date,
                         sell_date,
-                        buy_clean_price,
-                        sell_clean_price)
+                        float(buy_clean_price),
+                        float(sell_clean_price))
         except Exception:
             QtWidgets.QMessageBox.about(self, "错误信息", traceback.format_exc())
             return
@@ -131,16 +135,17 @@ class Ui(QtWidgets.QMainWindow):
             bond = Bond(bond_code,
                         buy_date,
                         sell_date,
-                        buy_clean_price,
-                        sell_clean_price)
+                        float(buy_clean_price),
+                        float(sell_clean_price))
         except Exception:
             QtWidgets.QMessageBox.about(self, "错误信息", traceback.format_exc())
             return
 
         repo_hpy = calculator.repo_hpy(bond)
-        repo_hpy_annualized = calculator.repo_hpy(bond, annualized=True)  # TODO
+        repo_hpy_annualized = calculator.repo_hpy(
+            bond, annualized=True)  # TODO
         coupon_received = calculator.get_coupon_received(bond)
-        
+
         self.hpy_text.setText(str(repo_hpy))
         self.hpy_annualized_text.setText(str(repo_hpy_annualized))
         self.coupon_received.setText(str(coupon_received))
@@ -177,8 +182,8 @@ class Ui(QtWidgets.QMainWindow):
             bond = Bond(bond_code,
                         buy_date,
                         sell_date,
-                        buy_clean_price,
-                        sell_clean_price)
+                        float(buy_clean_price),
+                        float(sell_clean_price))
         except Exception:
             QtWidgets.QMessageBox.about(self, "错误信息", traceback.format_exc())
             return
